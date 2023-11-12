@@ -14,6 +14,23 @@ class Creature:
     type: str
     
     def move(self):
+        # check for nearby food
+        nearby_food = self.world.nearby_food(self.x, self.y, self.senor_radius)
+        if nearby_food:
+            food = nearby_food[0]
+            if self.x < food.x:
+                self.x += 1
+            elif self.x > food.x:
+                self.x -= 1
+            elif self.y < food.y:
+                self.y += 1
+            elif self.y > food.y:
+                self.y -= 1
+            self.energy -= 1
+        else:
+            self.move_random()
+    
+    def move_random(self):
         while True:
             direction = random.randint(0, 3)
             if direction == 0 and self.x > 0:

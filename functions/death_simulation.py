@@ -25,18 +25,17 @@ def simulation():
     
     world = World(lim_x, lim_y)
     number_of_food = 100
-    food_items = []
     i = 0
     
-    while i < number_of_food:
+    while len(world.food) < number_of_food:
         x_position = random.randint(0,lim_x)
         y_position = random.randint(0,lim_y)
         food_energy = random.randint(5,50)
-        food = Food(x_position,y_position,food_energy,1)
+        food = Food(x_position,y_position,food_energy)
             
-        food_coordinates = [(f.x, f.y) for f in food_items]
+        food_coordinates = [(f.x, f.y) for f in world.food]
         if (food.x, food.y) not in food_coordinates:
-            food_items.append(food)
+            world.food.append(food)
             logger.info(f"Food with X: {food.x} and Y: {food.y} and energy: {food.energy_provided} created!")
             i += 1
         
@@ -48,10 +47,10 @@ def simulation():
     
     while creature.energy > 0:
         creature.move()
-        for food in food_items:           
+        for food in world.food:           
             if creature.x == food.x and creature.y == food.y:
                 creature.eat(food)
-                food.energy_provided = 0
+                world.food.remove(food)
                 print("Food eaten")
                 gegessen = True
                 #break
