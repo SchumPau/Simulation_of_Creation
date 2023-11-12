@@ -68,10 +68,12 @@ def simulation():
                         print("Food eaten")
                         #break
                 if creature.energy == 0 and len(creatures) == 1:
+                    creature.death()
                     creatures.remove(creature)
                     print("All Creatures died")
                     dead = True
                 elif creature.energy == 0:
+                    creature.death()
                     creatures.remove(creature)
                     print("Creature died")
                 

@@ -23,6 +23,7 @@ class Creature:
     type: str
     database_id: int = None
     connection: Connection = None
+    log_data: list = dataclasses.field(default_factory=list, init=False)
     
     def __post_init__(self):
         # read environment variables
@@ -59,11 +60,13 @@ class Creature:
         else:
             self.move_random()
             
-        # insert into database
-        stmt = insert(LogModel).values(creature_id=self.database_id, x=self.x, y=self.y, energy=self.energy)
-        result = self.connection.execute(stmt)
-        self.connection.commit()
-        logger.debug(f"Result of insert into log database: {result.inserted_primary_key}")
+        # insert into log
+        self.log_data.append({
+            'creature_id': self.database_id,
+            'x': self.x,
+            'y': self.y,
+            'energy': self.energy
+        })
     
     def move_random(self):
         while True:
@@ -84,3 +87,10 @@ class Creature:
         
     def eat(self, food: Food):
         self.energy += food.energy_provided
+        
+    def death(self):
+        # insert into database
+        stmt = insert(LogModel).values(self.log_data)
+        result = self.connection.execute(stmt)
+        self.connection.commit()
+        logger.debug(f"Result of batch insert into log database: {result.inserted_primary_key}")
