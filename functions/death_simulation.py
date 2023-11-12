@@ -24,7 +24,10 @@ def simulation():
     
     world = World(lim_x, lim_y)
     number_of_food = 100
+    number_of_creature = 10
     i = 0
+    
+    creatures = []
     
     while len(world.food) < number_of_food:
         x_position = random.randint(0,lim_x)
@@ -37,23 +40,41 @@ def simulation():
             world.food.append(food)
             logger.info(f"Food with X: {food.x} and Y: {food.y} and energy: {food.energy_provided} created!")
             i += 1
-        
-    creature = Creature(5, 5, 20, 1, world, "A")
     
-    #simulation_plot(food_items,creature,world)
+    while len(creatures) < number_of_creature:
+        x_position = random.randint(0,lim_x)
+        y_position = random.randint(0,lim_y)
+        creature_energy = random.randint(5,25)
+        sensor_radius = random.randint(2,7)
+        creature = Creature(x_position,y_position,creature_energy,sensor_radius,world,"A")
+            
+        creature_coordinates = [(c.x, c.y) for c in creatures]
+        if (creature.x, creature.y) not in creature_coordinates:
+            creatures.append(creature)
+            logger.info(f"Creature with X: {creature.x} and Y: {creature.y} and energy: {creature.energy} created!")
+            i += 1
     
-    gegessen = False
+    dead = False
     
-    while creature.energy > 0:
-        creature.move()
-        for food in world.food:           
-            if creature.x == food.x and creature.y == food.y:
-                creature.eat(food)
-                world.food.remove(food)
-                print("Food eaten")
-                gegessen = True
-                #break
-        
-        print(creature.x, creature.y, creature.energy)
+    while not dead:
+        random.shuffle(creatures)
+        for creature in creatures:
+            if creature.energy > 0:
+                creature.move()
+                for food in world.food:           
+                    if creature.x == food.x and creature.y == food.y:
+                        creature.eat(food)
+                        world.food.remove(food)
+                        print("Food eaten")
+                        #break
+                if creature.energy == 0 and len(creatures) == 1:
+                    creatures.remove(creature)
+                    print("All Creatures died")
+                    dead = True
+                elif creature.energy == 0:
+                    creatures.remove(creature)
+                    print("Creature died")
+                
+                print(creature.x, creature.y, creature.energy)
     
-    return gegessen
+    return dead
