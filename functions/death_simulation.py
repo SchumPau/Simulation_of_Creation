@@ -4,16 +4,16 @@ from classes.Food import Food
 import random
 import logging
 import coloredlogs
+import matplotlib.pyplot as plt
+import numpy as np
+import matplotlib.animation as animation
+from matplotlib import style
+style.use('fivethirtyeight')
 
 logger = logging.getLogger(__name__)
 coloredlogs.install(level='INFO', logger=logger, fmt='[%(asctime)s] %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 def simulation_plot(food_items, creature, world):
-    import matplotlib.pyplot as plt
-    import numpy as np
-    import matplotlib.animation as animation
-    from matplotlib import style
-    style.use('fivethirtyeight')
     
     fig = plt.figure()
     ax1 = fig.add_subplot(1,1,1)
