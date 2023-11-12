@@ -2,6 +2,11 @@ from classes.Creature import Creature
 from classes.World import World
 from classes.Food import Food
 import random
+import logging
+import coloredlogs
+
+logger = logging.getLogger(__name__)
+coloredlogs.install(level='INFO', logger=logger, fmt='[%(asctime)s] %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 def simulation():
     lim_x = 10000
@@ -31,6 +36,7 @@ def simulation():
         food_coordinates = [(f.x, f.y) for f in food_items]
         if (food.x, food.y) not in food_coordinates:
             food_items.append(food)
+            logger.info(f"Food with X: {food.x} and Y: {food.y} and energy: {food.energy_provided} created!")
             i += 1
         
     creature = Creature(5, 5, 10, 1, world, "A")
