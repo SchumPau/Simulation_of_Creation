@@ -1,6 +1,7 @@
 from classes.Creature import Creature
 from classes.World import World
 from classes.Food import Food
+import random
 
 def simulation():
     lim_x = 10000
