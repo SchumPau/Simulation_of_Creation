@@ -9,7 +9,7 @@ from matplotlib import style
 style.use('fivethirtyeight')
 
 logger = logging.getLogger(__name__)
-coloredlogs.install(level='INFO', logger=logger, fmt='[%(asctime)s] %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+coloredlogs.install(level='DEBUG', logger=logger, fmt='[%(asctime)s] %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 def simulation_plot(food_items,creature,world):
     plt.scatter(creature.x, creature.y, s=100, c='red', marker='o')

@@ -16,14 +16,14 @@ Base = declarative_base()
 
 class World(Base):
     __tablename__ = "worlds"
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     width = Column(Integer)
     height = Column(Integer)
     creatures = relationship("Creature", back_populates="world")
     
 class Creature(Base):
     __tablename__ = "creatures"
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     start_x = Column(Integer)
     start_y = Column(Integer)
     start_energy = Column(Integer)
@@ -34,7 +34,7 @@ class Creature(Base):
     
 class Log(Base):
     __tablename__ = "logs"
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     creature_id = Column(Integer, ForeignKey("creatures.id"))
     creature = relationship("Creature")
     x = Column(Integer)
