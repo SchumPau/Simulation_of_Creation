@@ -2,6 +2,7 @@ import dataclasses
 import random
 
 from classes.World import World
+from classes.Food import Food
 
 @dataclasses.dataclass
 class Creature:
@@ -31,4 +32,3 @@ class Creature:
         
     def eat(self, food):
         self.energy += food.energy_provided
-        self.world.remove_food(food)

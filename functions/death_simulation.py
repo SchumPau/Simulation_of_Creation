@@ -1,7 +1,6 @@
 from classes.Creature import Creature
 from classes.World import World
 from classes.Food import Food
-from functions.functions import *
 
 def simulation():
     lim_x = 10000
@@ -17,18 +16,18 @@ def simulation():
         food_energy = random.randint(5,50)
         food = Food(x_position,y_position,food_energy,1)
         food_items.append(food)
-        
-    food = Food(10,10,10,1)
-        
+        print(f"Food with X: {x_position} and Y: {y_position} and energy: {food_energy} created!")
+                
     creature = Creature(5, 5, 10, 1, world, "A")
     
     while creature.energy > 0:
         creature.move()
         
-        if creature.x == food.x and creature.y == food.y:
-            creature.eat(food)
-            food = Food(10,10,0,1)
-            print("Food eaten")
-            break
+        for food in food_items:           
+            if creature.x == food.x and creature.y == food.y:
+                creature.eat(food)
+                food.energy_provided = 0
+                print("Food eaten")
+                break
         
         print(creature.x, creature.y, creature.energy)
