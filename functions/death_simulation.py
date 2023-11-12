@@ -5,7 +5,6 @@ import random
 import logging
 import coloredlogs
 import matplotlib.pyplot as plt
-import numpy as np
 import matplotlib.animation as animation
 from matplotlib import style
 style.use('fivethirtyeight')
@@ -13,25 +12,11 @@ style.use('fivethirtyeight')
 logger = logging.getLogger(__name__)
 coloredlogs.install(level='INFO', logger=logger, fmt='[%(asctime)s] %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
-def simulation_plot(food_items, creature, world):
-    
-    fig = plt.figure()
-    ax1 = fig.add_subplot(1,1,1)
-    
-    def animate(i):
-        x = []
-        y = []
-        for food in food_items:
-            x.append(food.x)
-            y.append(food.y)
-        x.append(creature.x)
-        y.append(creature.y)
-        ax1.clear()
-        ax1.scatter(x,y)
-        ax1.set_xlim(0,world.max_x)
-        ax1.set_ylim(0,world.max_y)
-    
-    ani = animation.FuncAnimation(fig, animate, interval=100)
+def simulation_plot(food_items,creature,world):
+    plt.scatter(creature.x, creature.y, s=100, c='red', marker='o')
+    plt.scatter([f.x for f in food_items], [f.y for f in food_items], s=50, c='green', marker='o')
+    plt.xlim(0, world.max_x)
+    plt.ylim(0, world.max_y)
     plt.show()
 
 def simulation():
@@ -55,9 +40,11 @@ def simulation():
             logger.info(f"Food with X: {food.x} and Y: {food.y} and energy: {food.energy_provided} created!")
             i += 1
         
-    creature = Creature(5, 5, 10, 1, world, "A")
+    creature = Creature(5, 5, 20, 1, world, "A")
     
-    simulation_plot(food_items,creature,world)
+    #simulation_plot(food_items,creature,world)
+    
+    gegessen = False
     
     while creature.energy > 0:
         creature.move()
@@ -66,6 +53,9 @@ def simulation():
                 creature.eat(food)
                 food.energy_provided = 0
                 print("Food eaten")
-                break
+                gegessen = True
+                #break
         
         print(creature.x, creature.y, creature.energy)
+    
+    return gegessen
