@@ -28,3 +28,7 @@ class Creature:
                 self.y += 1
                 break
         self.energy -= 1
+        
+    def eat(self, food):
+        self.energy += food.energy_provided
+        self.world.remove_food(food)
