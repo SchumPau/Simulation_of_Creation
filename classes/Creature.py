@@ -94,3 +94,4 @@ class Creature:
         result = self.connection.execute(stmt)
         self.connection.commit()
         logger.debug(f"Result of batch insert into log database: {result.inserted_primary_key}")
+        self.log_data = []
