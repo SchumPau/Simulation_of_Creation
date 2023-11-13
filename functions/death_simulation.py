@@ -55,6 +55,7 @@ def simulation(lim_x,lim_y,number_of_food,number_of_creature):
     
     # Simulation
     while not dead:
+        
         # Shuffle of Creatures
         random.shuffle(creatures)
         
