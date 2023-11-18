@@ -9,7 +9,7 @@ from classes.Food import Food
 from database.models import World as WorldModel
 
 logger = logging.getLogger(__name__)
-coloredlogs.install(level='DEBUG', logger=logger, fmt='[%(asctime)s] %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+coloredlogs.install(level='INFO', logger=logger, fmt='[%(asctime)s] %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 @dataclasses.dataclass
 class World:
@@ -27,7 +27,7 @@ class World:
         password = config("DB_PASSWORD")
         host = config("DB_HOST")
 
-        engine = create_engine(f"mysql+mysqlconnector://{user}:{password}@{host}:3306/{user}")
+        engine = create_engine(f"mysql+mysqlconnector://{user}:{password}@{host}:3306/simulation_of_creation")
         conn = engine.connect()
         self.connection = conn
         

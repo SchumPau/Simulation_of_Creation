@@ -4,6 +4,7 @@ from sqlalchemy import create_engine, insert, Connection
 from decouple import config
 import logging
 import coloredlogs
+import math
 
 from classes.World import World
 from classes.Food import Food
@@ -11,7 +12,7 @@ from database.models import Creature as CreatureModel
 from database.models import Log as LogModel
 
 logger = logging.getLogger(__name__)
-coloredlogs.install(level='DEBUG', logger=logger, fmt='[%(asctime)s] %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+coloredlogs.install(level='INFO', logger=logger, fmt='[%(asctime)s] %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 @dataclasses.dataclass
 class Creature:
@@ -21,17 +22,19 @@ class Creature:
     sensor_radius: int
     world: World
     type: str
+    start_energy: int = None
     database_id: int = None
     connection: Connection = None
-    log_data: list = dataclasses.field(default_factory=list, init=False)
+    log_data: list = dataclasses.field(default_factory=list, init=False, repr=False)
     
     def __post_init__(self):
+        self.start_energy = self.energy
         # read environment variables
         user = config("DB_USER")
         password = config("DB_PASSWORD")
         host = config("DB_HOST")
 
-        engine = create_engine(f"mysql+mysqlconnector://{user}:{password}@{host}:3306/{user}")
+        engine = create_engine(f"mysql+mysqlconnector://{user}:{password}@{host}:3306/simulation_of_creation")
         conn = engine.connect()
         self.connection = conn
         
@@ -56,7 +59,7 @@ class Creature:
                 self.y += 1
             elif self.y > food.y:
                 self.y -= 1
-            self.energy -= 1
+            self.energy -= math.ceil(1 + 0.1 * self.sensor_radius)
         else:
             self.move_random()
             

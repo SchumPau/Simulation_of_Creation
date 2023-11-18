@@ -7,7 +7,7 @@ user = config("DB_USER")
 password = config("DB_PASSWORD")
 host = config("DB_HOST")
 
-engine = create_engine(f"mysql+mysqlconnector://{user}:{password}@{host}:3306/{user}")
+engine = create_engine(f"mysql+mysqlconnector://{user}:{password}@{host}:3306/simulation_of_creation")
 conn = engine.connect()
 result = conn.execute(text("SHOW TABLES"))
 print(result.fetchall())

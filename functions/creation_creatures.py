@@ -7,7 +7,7 @@ import coloredlogs
 from typing import List
 
 logger = logging.getLogger(__name__)
-coloredlogs.install(level='DEBUG', logger=logger, fmt='[%(asctime)s] %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+coloredlogs.install(level='INFO', logger=logger, fmt='[%(asctime)s] %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 def create_creature(number_of_creatures: int, world: World, old_generation: List[Creature]):
     
@@ -47,8 +47,8 @@ def create_creature(number_of_creatures: int, world: World, old_generation: List
         while number_of_creatures_created != 5:
             x_position = random.randint(0,lim_x)
             y_position = random.randint(0,lim_y)
-            creature_energy = random.randint(parent_1.energy,parent_2.energy) # Fix it. Parent 1 and 2 have 0 energy after their simulation
-            sensor_radius = random.randint(parent_1.sensor_radius,parent_2.sensor_radius)
+            creature_energy = random.randint(min(parent_1.start_energy,parent_2.start_energy), max(parent_1.start_energy,parent_2.start_energy)) + random.randint(-5,5)
+            sensor_radius = random.randint(min(parent_1.sensor_radius,parent_2.sensor_radius), max(parent_1.sensor_radius,parent_2.sensor_radius)) + random.randint(-5,5)
             creature = Creature(x_position,y_position,creature_energy,sensor_radius,world,"A")
             logger.debug(f"Child {number_of_creatures_created} from Parent 1+2 created")
             
@@ -65,8 +65,8 @@ def create_creature(number_of_creatures: int, world: World, old_generation: List
         while number_of_creatures_created != 5:
             x_position = random.randint(0,lim_x)
             y_position = random.randint(0,lim_y)
-            creature_energy = random.randint(parent_3.energy,parent_4.energy)
-            sensor_radius = random.randint(parent_3.sensor_radius,parent_4.sensor_radius)
+            creature_energy = random.randint(min(parent_3.start_energy,parent_4.start_energy), max(parent_3.start_energy,parent_4.start_energy)) + random.randint(-5,5)
+            sensor_radius = random.randint(min(parent_3.sensor_radius,parent_4.sensor_radius), max(parent_3.sensor_radius,parent_4.sensor_radius)) + random.randint(-5,5)
             creature = Creature(x_position,y_position,creature_energy,sensor_radius,world,"A")
             logger.debug(f"Child {number_of_creatures_created} from Parent 3+4 created")
             
