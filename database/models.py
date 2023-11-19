@@ -19,6 +19,7 @@ class World(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     width = Column(Integer)
     height = Column(Integer)
+    simulation_id = Column(Integer, ForeignKey("simulations.id"))
     creatures = relationship("Creature", back_populates="world")
     
 class Creature(Base):
@@ -40,5 +41,11 @@ class Log(Base):
     x = Column(Integer)
     y = Column(Integer)
     energy = Column(Integer)
+    
+class Simulation(Base):
+    __tablename__ = "simulations"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    world_id = Column(Integer, ForeignKey("worlds.id"))
+    world = relationship("World")
     
 Base.metadata.create_all(engine)

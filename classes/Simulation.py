@@ -5,25 +5,17 @@ from decouple import config
 import logging
 import coloredlogs
 
-from classes.Food import Food
-from classes.Simulation import Simulation
-from database.models import World as WorldModel
+from database.models import Simulation as SimulationModel
 
 logger = logging.getLogger(__name__)
 coloredlogs.install(level='INFO', logger=logger, fmt='[%(asctime)s] %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 @dataclasses.dataclass
-class World:
-    max_x: int
-    max_y: int
-    food = List[Food]
-    simulation: Simulation
+class Simulation:
     database_id: int = None
     connection: Connection = None
     
     def __post_init__(self):
-        self.food = []
-        
         # read environment variables
         user = config("DB_USER")
         password = config("DB_PASSWORD")
@@ -34,13 +26,9 @@ class World:
         self.connection = conn
         
         # insert into database
-        stmt = insert(WorldModel).values(width=self.max_x, height=self.max_y, simulation_id=self.simulation.database_id)
+        stmt = insert(SimulationModel).values()
         result = self.connection.execute(stmt)
         self.connection.commit()
         self.database_id = result.inserted_primary_key[0]
-        logger.debug(f"Result of insert into world database: {result.inserted_primary_key}")
-        logger.info(f"World with width: {self.max_x} and height: {self.max_y} created!")
-    
-    def nearby_food(self, x, y, radius):
-        nearby_food = [f for f in self.food if abs(f.x - x) <= radius and abs(f.y - y) <= radius]
-        return sorted(nearby_food, key=lambda f: abs(f.x - x) + abs(f.y - y))
+        logger.debug(f"Result of insert into simulation database: {result.inserted_primary_key}")
+        logger.info(f"Simulation created!")
