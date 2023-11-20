@@ -19,6 +19,7 @@ class World(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     width = Column(Integer)
     height = Column(Integer)
+    remaining_food = Column(Integer)
     simulation_id = Column(Integer, ForeignKey("simulations.id"))
     creatures = relationship("Creature", back_populates="world")
     

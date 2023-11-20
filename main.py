@@ -8,6 +8,8 @@ from functions.creation_creatures import create_creature
 
 next_generation = []
 old_generation = []
+result = []
+number_of_existing_food = 0
 first_round = True
 lim_x = 100
 lim_y = 100
@@ -16,13 +18,17 @@ number_of_creatures = 10
 
 sim = Simulation()
 
-for round in range(100):
+for round in range(5):
     
-    world = World(lim_x, lim_y, sim)    
+    world = World(lim_x, lim_y, sim, result)    
     
     next_generation = create_creature(number_of_creatures, world, old_generation)
     
-    old_generation = simulation(number_of_food, number_of_creatures, first_round, next_generation, world)
+    old_generation, result = simulation(number_of_food, number_of_creatures, first_round, next_generation, world, number_of_existing_food)
+    
+    number_of_existing_food = len(result)
+    
+    print(result)
     
     first_round = False
     

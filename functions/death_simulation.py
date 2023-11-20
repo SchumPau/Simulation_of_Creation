@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 coloredlogs.install(level='INFO', logger=logger, fmt='[%(asctime)s] %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 
-def simulation(number_of_food: int, number_of_creature: int, first_round: bool, creatures: List[Creature], world: World):
+def simulation(number_of_food: int, number_of_creature: int, first_round: bool, creatures: List[Creature], world: World, existing_food: int):
     
     # Implementation variables
     death_creatures = []
@@ -21,6 +21,8 @@ def simulation(number_of_food: int, number_of_creature: int, first_round: bool, 
     lim_x = world.max_x
     lim_y = world.max_y
     
+    number_of_food = number_of_food + existing_food
+    
     # Create world
     # world = World(lim_x, lim_y)
     
@@ -28,7 +30,7 @@ def simulation(number_of_food: int, number_of_creature: int, first_round: bool, 
     while len(world.food) < number_of_food:
         x_position = random.randint(0,lim_x)
         y_position = random.randint(0,lim_y)
-        food_energy = random.randint(5,25)
+        food_energy = random.randint(5,15)
         food = Food(x_position,y_position,food_energy)
         
         # Listing of all Food and send it to world
@@ -72,4 +74,4 @@ def simulation(number_of_food: int, number_of_creature: int, first_round: bool, 
     
     # return last 4 creatures
     logger.info(f"Round finished, best 4 creatures: {death_creatures[-4:]}")
-    return death_creatures[-4:]
+    return death_creatures[-4:], world.food

@@ -18,11 +18,13 @@ class World:
     max_y: int
     food = List[Food]
     simulation: Simulation
+    existing_food: list
     database_id: int = None
     connection: Connection = None
     
     def __post_init__(self):
-        self.food = []
+        self.food = self.existing_food
+        self.existing_food_number = len(self.existing_food)
         
         # read environment variables
         user = config("DB_USER")
@@ -34,7 +36,7 @@ class World:
         self.connection = conn
         
         # insert into database
-        stmt = insert(WorldModel).values(width=self.max_x, height=self.max_y, simulation_id=self.simulation.database_id)
+        stmt = insert(WorldModel).values(width=self.max_x, height=self.max_y,remaining_food = self.existing_food_number, simulation_id=self.simulation.database_id)
         result = self.connection.execute(stmt)
         self.connection.commit()
         self.database_id = result.inserted_primary_key[0]
