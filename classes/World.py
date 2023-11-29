@@ -24,7 +24,6 @@ class World:
     
     def __post_init__(self):
         self.food = self.existing_food
-        self.existing_food_number = len(self.existing_food)
         
         # read environment variables
         user = config("DB_USER")
@@ -36,7 +35,7 @@ class World:
         self.connection = conn
         
         # insert into database
-        stmt = insert(WorldModel).values(width=self.max_x, height=self.max_y,remaining_food = self.existing_food_number, simulation_id=self.simulation.database_id)
+        stmt = insert(WorldModel).values(width=self.max_x, height=self.max_y, simulation_id=self.simulation.database_id)
         result = self.connection.execute(stmt)
         self.connection.commit()
         self.database_id = result.inserted_primary_key[0]
@@ -46,3 +45,9 @@ class World:
     def nearby_food(self, x, y, radius):
         nearby_food = [f for f in self.food if abs(f.x - x) <= radius and abs(f.y - y) <= radius]
         return sorted(nearby_food, key=lambda f: abs(f.x - x) + abs(f.y - y))
+    
+    def set_remaining_food(self, remaining_food):
+        stmt = WorldModel.update().where(WorldModel.id == self.database_id).values(remaining_food=remaining_food)
+        self.connection.execute(stmt)
+        self.connection.commit()
+        logger.info(f"Remaining food updated to {remaining_food} in world with id {self.database_id}")

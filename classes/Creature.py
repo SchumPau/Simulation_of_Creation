@@ -15,6 +15,22 @@ logger = logging.getLogger(__name__)
 coloredlogs.install(level='INFO', logger=logger, fmt='[%(asctime)s] %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 @dataclasses.dataclass
+class Predator:
+    x: int
+    y: int
+    energy: int
+    sensor_radius: int
+    world: World
+    type: str
+    start_energy: int = None
+    database_id: int = None
+    connection: Connection = None
+    log_data: list = dataclasses.field(default_factory=list, init=False, repr=False)
+    
+    def __post_init__(self):
+        x = self.x
+
+@dataclasses.dataclass
 class Creature:
     x: int
     y: int
